@@ -12,13 +12,8 @@ import (
 type LangDef struct {
 	identifier string
 	filename   string
-	path       string
+	basePath   string
 	version    string
-}
-
-// Present Does the language version exist?
-func (l *LangDef) Present() bool {
-	return l.version != ""
 }
 
 // Output string
@@ -27,15 +22,13 @@ func (l *LangDef) String() string {
 }
 
 // GetVersion gets the Version
-func (l *LangDef) GetVersion(path string) {
-	candidate := filepath.Join(path, l.filename)
+func (l *LangDef) GetVersion() {
+	candidate := filepath.Join(l.basePath, l.filename)
 	_, err := os.Stat(candidate)
 
 	if err != nil {
 		return
 	}
-
-	l.path = candidate
 
 	file, err := os.Open(candidate)
 	defer file.Close()
@@ -50,8 +43,9 @@ func (l *LangDef) GetVersion(path string) {
 }
 
 // New Instance
-func New(filename string, identifier string) *LangDef {
+func New(path string, filename string, identifier string) *LangDef {
 	return &LangDef{
+		basePath:   path,
 		filename:   filename,
 		identifier: identifier,
 	}

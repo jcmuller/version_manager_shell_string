@@ -2,30 +2,34 @@ package versions
 
 import (
 	"strings"
-
-	"github.com/jcmuller/utils/version_manager_shell_string/langdef"
 )
+
+type checker interface {
+	GetVersion()
+	String() string
+	StartCheck()
+}
 
 // Versions Hold these guys
 type Versions struct {
-	path     string
-	checkers []*langdef.LangDef
+	checkers []checker
 }
 
 // New new version
-func New(path string) *Versions {
-	return &Versions{path: path}
+func New() *Versions {
+	return &Versions{}
 }
 
 // Add a checker
-func (v *Versions) AddChecker(checker *langdef.LangDef) {
+func (v *Versions) AddChecker(checker checker) {
 	v.checkers = append(v.checkers, checker)
+	checker.StartCheck()
 }
 
 // GetVersions does that
 func (v *Versions) GetVersions() {
 	for _, element := range v.checkers {
-		element.GetVersion(v.path)
+		element.GetVersion()
 	}
 }
 
@@ -33,9 +37,7 @@ func (v *Versions) presentVersions() []string {
 	o := make([]string, 0)
 
 	for _, element := range v.checkers {
-		if element.Present() {
-			o = append(o, element.String())
-		}
+		o = append(o, element.String())
 	}
 
 	return o

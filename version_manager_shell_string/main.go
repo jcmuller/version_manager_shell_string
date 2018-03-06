@@ -9,7 +9,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jcmuller/utils/version_manager_shell_string/langdef"
+	"github.com/jcmuller/utils/version_manager_shell_string/gochecker"
+	"github.com/jcmuller/utils/version_manager_shell_string/nvmchecker"
+	"github.com/jcmuller/utils/version_manager_shell_string/rubychecker"
 	"github.com/jcmuller/utils/version_manager_shell_string/versions"
 )
 
@@ -39,12 +41,6 @@ func handle(err error) {
 	}
 }
 
-func output(checkers []*langdef.LangDef) {
-	for _, element := range checkers {
-		fmt.Printf(element.String())
-	}
-}
-
 func main() {
 	dir, err := os.Getwd()
 
@@ -56,14 +52,12 @@ func main() {
 		os.Exit(0)
 	}
 
-	v := versions.New(path)
+	v := versions.New()
 
-	v.AddChecker(langdef.New(".ruby-version", "R"))
-	v.AddChecker(langdef.New(".go-version", "G"))
-	v.AddChecker(langdef.New(".nvmrc", "N"))
+	v.AddChecker(rubychecker.New(path))
+	v.AddChecker(nvmchecker.New(path))
+	v.AddChecker(gochecker.New(path))
 
 	v.GetVersions()
-	//getVersions(path, checkers)
-	//output(checkers)
 	fmt.Println(v)
 }
