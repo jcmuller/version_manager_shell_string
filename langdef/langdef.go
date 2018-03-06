@@ -5,54 +5,72 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
-// LangDef Language definition
 type LangDef struct {
-	identifier string
-	filename   string
-	basePath   string
-	version    string
+	BasePath   string
+	Identifier string
+	File       string
+	Command    *exec.Cmd
+	Version    string
+	Defined    bool
+}
+
+// StartCheck
+func (l *LangDef) StartCheck() {
+	reader, err := l.Command.StdoutPipe()
+	handle(err)
+
+	scanner := bufio.NewScanner(reader)
+
+	go func() {
+		for scanner.Scan() {
+			l.Version = scanner.Text()
+		}
+	}()
+
+	err = l.Command.Start()
+	handle(err)
+}
+
+// Wait
+func (l *LangDef) Wait() {
+	err := l.Command.Wait()
+	handle(err)
+}
+
+func (l *LangDef) setDefined() {
+	file := filepath.Join(l.BasePath, l.File)
+	_, err := os.Stat(file)
+	l.Defined = err == nil
+}
+
+// GetVersion does that
+func (l *LangDef) GetVersion() {
+	l.setDefined()
+	l.Wait()
 }
 
 // Output string
 func (l *LangDef) String() string {
-	return fmt.Sprintf("%s:%s", l.identifier, l.version)
-}
+	str := fmt.Sprintf("%s:%s", l.Identifier, l.Version)
 
-// GetVersion gets the Version
-func (l *LangDef) GetVersion() {
-	candidate := filepath.Join(l.basePath, l.filename)
-	_, err := os.Stat(candidate)
-
-	if err != nil {
-		return
+	if l.Defined {
+		str = strings.Join([]string{str, "*"}, "")
 	}
 
-	file, err := os.Open(candidate)
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		l.version = scanner.Text()
-	}
-
-	err = scanner.Err()
-	handle(err)
-}
-
-// New Instance
-func New(path string, filename string, identifier string) *LangDef {
-	return &LangDef{
-		basePath:   path,
-		filename:   filename,
-		identifier: identifier,
-	}
+	return str
 }
 
 func handle(err error) {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+func (l *LangDef) IsDefined() bool {
+	return l.Defined
 }
