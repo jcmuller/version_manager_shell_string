@@ -48,10 +48,6 @@ func main() {
 
 	path, err := findDirectory(dir)
 
-	if err != nil {
-		os.Exit(0)
-	}
-
 	v := versions.New(path)
 
 	v.AddChecker(rubychecker.New(path))
