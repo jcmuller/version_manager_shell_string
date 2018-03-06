@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jcmuller/utils/version_manager_shell_string/gochecker"
-	"github.com/jcmuller/utils/version_manager_shell_string/nvmchecker"
-	"github.com/jcmuller/utils/version_manager_shell_string/rubychecker"
-	"github.com/jcmuller/utils/version_manager_shell_string/versions"
+	"github.com/jcmuller/version_manager_shell_string/gochecker"
+	"github.com/jcmuller/version_manager_shell_string/nvmchecker"
+	"github.com/jcmuller/version_manager_shell_string/rubychecker"
+	"github.com/jcmuller/version_manager_shell_string/versions"
 )
 
 func findDirectory(input string) (string, error) {
