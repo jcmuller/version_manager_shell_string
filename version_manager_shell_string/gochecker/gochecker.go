@@ -86,3 +86,7 @@ func (l *GoChecker) String() string {
 
 	return str
 }
+
+func (l *GoChecker) IsDefined() bool {
+	return l.defined
+}

@@ -52,7 +52,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	v := versions.New()
+	v := versions.New(path)
 
 	v.AddChecker(rubychecker.New(path))
 	v.AddChecker(nvmchecker.New(path))

@@ -182,3 +182,7 @@ func handle(err error) {
 		log.Panic(err)
 	}
 }
+
+func (l *NvmChecker) IsDefined() bool {
+	return l.defined
+}

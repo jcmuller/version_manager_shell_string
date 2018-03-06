@@ -86,3 +86,7 @@ func (l *RubyChecker) String() string {
 
 	return str
 }
+
+func (l *RubyChecker) IsDefined() bool {
+	return l.defined
+}
