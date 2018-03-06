@@ -1,12 +1,9 @@
 package versions
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type checker interface {
@@ -69,10 +66,7 @@ func (v *Versions) String() string {
 
 func (v *Versions) setOnlyDefined() {
 	file := filepath.Join(v.path, ".only_defined")
-	stats, err := os.Stat(file)
+	_, err := os.Stat(file)
 
-	fmt.Println("Only defined")
-	fmt.Println(spew.Sdump(stats))
-	fmt.Println(spew.Sdump(err))
 	v.onlyDefined = err == nil
 }
