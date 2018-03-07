@@ -18,7 +18,7 @@ var (
 )
 
 // New instance
-func New(path string) *NvmChecker {
+func New(path string) (*NvmChecker, error) {
 	return &NvmChecker{
 		&langdef.LangDef{
 			BasePath:   path,
@@ -26,7 +26,7 @@ func New(path string) *NvmChecker {
 			File:       ".nvmrc",
 			Command:    exec.Command("bash", argument),
 		},
-	}
+	}, nil
 }
 
 func handle(err error) {
