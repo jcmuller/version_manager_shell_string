@@ -13,7 +13,7 @@ type GoChecker struct {
 func New(path string) *GoChecker {
 	cmdPath, err := exec.LookPath("goenv")
 	if err != nil {
-		panic("Unable to find 'goenv' executable")
+		return nil
 	}
 
 	return &GoChecker{

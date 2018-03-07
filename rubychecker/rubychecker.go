@@ -15,7 +15,7 @@ type RubyChecker struct {
 func New(path string) *RubyChecker {
 	cmdPath, err := exec.LookPath("rbenv")
 	if err != nil {
-		panic("Unable to find 'rbenv' executable")
+		return nil
 	}
 
 	return &RubyChecker{
