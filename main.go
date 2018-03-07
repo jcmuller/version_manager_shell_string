@@ -50,9 +50,20 @@ func main() {
 
 	v := versions.New(path)
 
-	v.AddChecker(rubychecker.New(path))
-	v.AddChecker(nvmchecker.New(path))
-	v.AddChecker(gochecker.New(path))
+	rubychecker, err := rubychecker.New(path)
+	if err == nil {
+		v.AddChecker(rubychecker)
+	}
+
+	nvmchecker, err := nvmchecker.New(path)
+	if err == nil {
+		v.AddChecker(nvmchecker)
+	}
+
+	gochecker, err := gochecker.New(path)
+	if err == nil {
+		v.AddChecker(gochecker)
+	}
 
 	v.GetVersions()
 	fmt.Println(v)
