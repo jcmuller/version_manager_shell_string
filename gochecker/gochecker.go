@@ -11,12 +11,17 @@ type GoChecker struct {
 }
 
 func New(path string) *GoChecker {
+	cmdPath, err := exec.LookPath("goenv")
+	if err != nil {
+		return nil
+	}
+
 	return &GoChecker{
 		&langdef.LangDef{
 			BasePath:   path,
 			Identifier: "G",
 			File:       ".go-version",
-			Command:    exec.Command("/home/jcmuller/.goenv/bin/goenv", "version-name"),
+			Command:    exec.Command(cmdPath, "version-name"),
 		},
 	}
 }

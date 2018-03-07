@@ -13,12 +13,17 @@ type RubyChecker struct {
 
 // New ruby checker
 func New(path string) *RubyChecker {
+	cmdPath, err := exec.LookPath("rbenv")
+	if err != nil {
+		return nil
+	}
+
 	return &RubyChecker{
 		&langdef.LangDef{
 			BasePath:   path,
 			Identifier: "R",
 			File:       ".ruby-version",
-			Command:    exec.Command("/home/jcmuller/.rbenv/bin/rbenv", "version-name"),
+			Command:    exec.Command(cmdPath, "version-name"),
 		},
 	}
 }
