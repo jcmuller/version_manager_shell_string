@@ -28,6 +28,11 @@ func New(path string) *Versions {
 	}
 }
 
+// Checkers returns the checkers
+func (v *Versions) Checkers() []checker {
+	return v.checkers
+}
+
 // Add a checker
 func (v *Versions) AddChecker(checker checker) {
 	v.checkers = append(v.checkers, checker)
