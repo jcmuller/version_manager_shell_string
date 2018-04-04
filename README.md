@@ -1,11 +1,30 @@
-# version_manager_shell_string
-Go lang version manager shell string getter
+# version_manager_shell_string : Shell string with version manager strings
 
-## Usage
+## Overview
+[![GoDoc](https://godoc.org/github.com/jcmuller/version_manager_shell_string?status.svg)](https://godoc.org/github.com/jcmuller/version_manager_shell_string) [![Code Climate](https://codeclimate.com/github/jcmuller/version_manager_shell_string/badges/gpa.svg)](https://codeclimate.com/github/jcmuller/version_manager_shell_string) [![Go Report Card](https://goreportcard.com/badge/github.com/jcmuller/version_manager_shell_string)](https://goreportcard.com/report/github.com/jcmuller/version_manager_shell_string) [![Sourcegraph](https://sourcegraph.com/github.com/jcmuller/version_manager_shell_string/-/badge.svg)](https://sourcegraph.com/github.com/jcmuller/version_manager_shell_string?badge)
 
-This utility is meant to be called from your `PS` variables (for bash) or `xPROMPT` for zsh.
+Configurable single binary to gather all your version managers active versions.
 
-```sh
+## Install
+
+```
+go get github.com/jcmuller/version_manager_shell_string
+```
+
+## Example
+
+```
+```bash
 $ version_manager_shell_string
 R:2.4.3*|N:v8.6.0*|G:system
 ```
+
+That means:
+- rbenv: 2.4.3
+- nvm: 8.6.0
+- goenv: system
+```
+
+## License
+
+MIT.
