@@ -47,6 +47,10 @@ func main() {
 	handle(err)
 
 	path, err := findDirectory(dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "No directory found")
+		os.Exit(1)
+	}
 
 	v := versions.New(path)
 
