@@ -11,12 +11,14 @@ import (
 )
 
 type LangDef struct {
-	BasePath   string
-	Identifier string
-	File       string
-	Command    *exec.Cmd
-	Version    string
-	Defined    bool
+	BasePath    string
+	Command     *exec.Cmd
+	Version     string
+	Defined     bool
+	CommandName string   `json:"command"`
+	Args        []string `json:"args"`
+	Identifier  string   `json:"identifier`
+	File        string   `json:"file"`
 }
 
 // StartCheck
@@ -40,6 +42,12 @@ func (l *LangDef) StartCheck() {
 func (l *LangDef) Wait() {
 	err := l.Command.Wait()
 	handle(err)
+}
+
+func (l *LangDef) Prepare(path string) {
+	l.Command = exec.Command(l.CommandName, l.Args...)
+	l.BasePath = path
+	l.StartCheck()
 }
 
 func (l *LangDef) setDefined() {

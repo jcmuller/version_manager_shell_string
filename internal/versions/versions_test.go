@@ -3,7 +3,7 @@ package versions_test
 import (
 	"testing"
 
-	"github.com/jcmuller/version_manager_shell_string/versions"
+	"github.com/jcmuller/version_manager_shell_string/internal/versions"
 )
 
 type checkerMock struct {
