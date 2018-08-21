@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/jcmuller/version_manager_shell_string/langdef"
+	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
 )
 
 func TestStartCheck(t *testing.T) {
