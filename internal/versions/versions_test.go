@@ -3,51 +3,42 @@ package versions_test
 import (
 	"testing"
 
+	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
 	"github.com/jcmuller/version_manager_shell_string/internal/versions"
 )
 
-type checkerMock struct {
-	version string
-}
+type mockConfig struct{}
 
-func (c *checkerMock) GetVersion() {}
-
-func (c *checkerMock) String() string {
-	if c.version != "" {
-		return c.version
+var (
+	checker_a = &langdef.LangDef{
+		CommandName: "echo",
+		Args:        []string{"1.23.4"},
+		Identifier:  "A",
 	}
-
-	return "foo"
-}
-
-func (c *checkerMock) StartCheck() {}
-
-func (c *checkerMock) IsDefined() bool { return true }
-
-func TestAddChecker(t *testing.T) {
-	v := versions.New("foo")
-	c := &checkerMock{}
-
-	v.AddChecker(c)
-
-	if len(v.Checkers()) != 1 {
-		t.Error("Incorrect number of checkers")
+	checker_b = &langdef.LangDef{
+		CommandName: "echo",
+		Args:        []string{"99Foo"},
+		Identifier:  "Z",
 	}
+	checker_c = &langdef.LangDef{
+		CommandName: "echo",
+		Args:        []string{"3.1"},
+		Identifier:  "R",
+	}
+)
+
+func (c *mockConfig) Checkers() []*langdef.LangDef {
+	return []*langdef.LangDef{checker_a, checker_b, checker_c}
 }
 
-func TestGetVersions(t *testing.T) {
-	v := versions.New("foo")
-	v.GetVersions()
-}
+var (
+	c = &mockConfig{}
+)
 
 func TestString(t *testing.T) {
-	v := versions.New("foo")
-
-	v.AddChecker(&checkerMock{"V:1"})
-	v.AddChecker(&checkerMock{"G:10"})
-	v.AddChecker(&checkerMock{"H:21"})
-
-	expected := "V:1|G:10|H:21"
+	v := versions.New(c, "")
+	v.GetVersions()
+	expected := "A:1.23.4|Z:99Foo|R:3.1"
 	actual := v.String()
 
 	if expected != actual {

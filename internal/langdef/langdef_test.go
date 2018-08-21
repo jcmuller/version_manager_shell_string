@@ -1,7 +1,6 @@
 package langdef_test
 
 import (
-	"os/exec"
 	"testing"
 
 	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
@@ -9,16 +8,16 @@ import (
 
 func TestStartCheck(t *testing.T) {
 	l := &langdef.LangDef{
-		Identifier: "T",
-		Command:    exec.Command("echo", "foobar"),
+		CommandName: "echo",
+		Args:        []string{"1.23.4"},
+		Identifier:  "A",
 	}
 
-	l.StartCheck()
+	l.Prepare("some path")
 	l.GetVersion()
-	l.IsDefined()
 
 	actual := l.String()
-	expected := "T:foobar"
+	expected := "A:1.23.4"
 
 	if actual != expected {
 		t.Errorf("Incorrect version string.\n  Expected: %v\n    Actual: %s", expected, actual)
