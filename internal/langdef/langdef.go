@@ -3,7 +3,6 @@ package langdef
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -24,7 +23,10 @@ type LangDef struct {
 // StartCheck
 func (l *LangDef) StartCheck() {
 	reader, err := l.Command.StdoutPipe()
-	handle(err)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting stdout pipe: %+v\n", err)
+		os.Exit(1)
+	}
 
 	scanner := bufio.NewScanner(reader)
 
@@ -35,13 +37,19 @@ func (l *LangDef) StartCheck() {
 	}()
 
 	err = l.Command.Start()
-	handle(err)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error starting command: %+v\n", err)
+		os.Exit(1)
+	}
 }
 
 // Wait
 func (l *LangDef) Wait() {
 	err := l.Command.Wait()
-	handle(err)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error waiting for command: %+v\n", err)
+		os.Exit(1)
+	}
 }
 
 func (l *LangDef) Prepare(path string) {
@@ -63,20 +71,14 @@ func (l *LangDef) GetVersion() {
 }
 
 // Output string
-func (l *LangDef) String() string {
-	str := fmt.Sprintf("%s:%s", l.Identifier, l.Version)
+func (l *LangDef) String() (str string) {
+	str = fmt.Sprintf("%s:%s", l.Identifier, l.Version)
 
 	if l.Defined {
 		str = strings.Join([]string{str, "*"}, "")
 	}
 
-	return str
-}
-
-func handle(err error) {
-	if err != nil {
-		log.Panic(err)
-	}
+	return
 }
 
 func (l *LangDef) IsDefined() bool {

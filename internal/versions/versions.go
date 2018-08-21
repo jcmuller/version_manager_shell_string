@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jcmuller/version_manager_shell_string/internal/config"
+	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
 )
 
 type checker interface {
@@ -16,20 +16,25 @@ type checker interface {
 	Prepare(string)
 }
 
+type config interface {
+	Checkers() []*langdef.LangDef
+}
+
 // Versions Hold these guys
 type Versions struct {
 	path   string
-	config *config.Config
+	config config
 	//	checkers []langdef.LangDef
 	checkers    []checker
 	onlyDefined bool
 }
 
 // New new version
-func New(config *config.Config, path string) *Versions {
-	checkers := make([]checker, len(config.Checkers()))
-	for i, v := range config.Checkers() {
+func New(c config, path string) *Versions {
+	checkers := make([]checker, len(c.Checkers()))
+	for i, v := range c.Checkers() {
 		checkers[i] = checker(v)
+		v.Prepare(path)
 	}
 
 	return &Versions{
@@ -42,7 +47,6 @@ func New(config *config.Config, path string) *Versions {
 // GetVersions does that
 func (v *Versions) GetVersions() {
 	for _, element := range v.checkers {
-		element.Prepare(v.path)
 		element.GetVersion()
 	}
 }
