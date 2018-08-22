@@ -10,10 +10,10 @@ import (
 
 type chkr interface {
 	GetVersion()
-	String() string
-	StartCheck()
 	IsDefined() bool
 	Prepare(string)
+	StartCheck()
+	String() string
 }
 
 type cfg interface {
@@ -22,9 +22,9 @@ type cfg interface {
 
 // Versions Hold these guys
 type Versions struct {
-	path        string
 	checkers    []chkr
 	onlyDefined bool
+	path        string
 }
 
 // New new version
@@ -36,9 +36,9 @@ func New(c cfg, path string) *Versions {
 	}
 
 	return &Versions{
-		path:        path,
-		onlyDefined: false,
 		checkers:    checkers,
+		onlyDefined: false,
+		path:        path,
 	}
 }
 
