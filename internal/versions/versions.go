@@ -8,7 +8,7 @@ import (
 	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
 )
 
-type checker interface {
+type chkr interface {
 	GetVersion()
 	String() string
 	StartCheck()
@@ -25,15 +25,15 @@ type Versions struct {
 	path   string
 	config config
 	//	checkers []langdef.LangDef
-	checkers    []checker
+	checkers    []chkr
 	onlyDefined bool
 }
 
 // New new version
 func New(c config, path string) *Versions {
-	checkers := make([]checker, len(c.Checkers()))
+	checkers := make([]chkr, len(c.Checkers()))
 	for i, v := range c.Checkers() {
-		checkers[i] = checker(v)
+		checkers[i] = chkr(v)
 		v.Prepare(path)
 	}
 
