@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type LangDef struct {
+type Checker struct {
 	BasePath    string
 	Command     *exec.Cmd
 	Version     string
@@ -21,7 +21,7 @@ type LangDef struct {
 }
 
 // StartCheck
-func (l *LangDef) StartCheck() {
+func (l *Checker) StartCheck() {
 	reader, err := l.Command.StdoutPipe()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting stdout pipe: %+v\n", err)
@@ -44,7 +44,7 @@ func (l *LangDef) StartCheck() {
 }
 
 // Wait
-func (l *LangDef) Wait() {
+func (l *Checker) Wait() {
 	err := l.Command.Wait()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error waiting for command: %+v\n", err)
@@ -52,26 +52,26 @@ func (l *LangDef) Wait() {
 	}
 }
 
-func (l *LangDef) Prepare(path string) {
+func (l *Checker) Prepare(path string) {
 	l.Command = exec.Command(l.CommandName, l.Args...)
 	l.BasePath = path
 	l.StartCheck()
 }
 
-func (l *LangDef) setDefined() {
+func (l *Checker) setDefined() {
 	file := filepath.Join(l.BasePath, l.File)
 	_, err := os.Stat(file)
 	l.Defined = err == nil
 }
 
 // GetVersion does that
-func (l *LangDef) GetVersion() {
+func (l *Checker) GetVersion() {
 	l.setDefined()
 	l.Wait()
 }
 
 // Output string
-func (l *LangDef) String() (str string) {
+func (l *Checker) String() (str string) {
 	str = fmt.Sprintf("%s:%s", l.Identifier, l.Version)
 
 	if l.Defined {
@@ -81,6 +81,6 @@ func (l *LangDef) String() (str string) {
 	return
 }
 
-func (l *LangDef) IsDefined() bool {
+func (l *Checker) IsDefined() bool {
 	return l.Defined
 }

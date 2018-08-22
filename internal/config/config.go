@@ -19,14 +19,14 @@ var (
 	)
 )
 
-func (c *Config) Checkers() (checkers []*checker.LangDef) {
+func (c *Config) Checkers() (checkers []*checker.Checker) {
 	checkers = c.checkers
 
 	return
 }
 
 type Config struct {
-	checkers []*checker.LangDef
+	checkers []*checker.Checker
 }
 
 func New() (c *Config) {

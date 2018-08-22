@@ -10,25 +10,25 @@ import (
 type mockConfig struct{}
 
 var (
-	checker_a = &checker.LangDef{
+	checker_a = &checker.Checker{
 		CommandName: "echo",
 		Args:        []string{"1.23.4"},
 		Identifier:  "A",
 	}
-	checker_b = &checker.LangDef{
+	checker_b = &checker.Checker{
 		CommandName: "echo",
 		Args:        []string{"99Foo"},
 		Identifier:  "Z",
 	}
-	checker_c = &checker.LangDef{
+	checker_c = &checker.Checker{
 		CommandName: "echo",
 		Args:        []string{"3.1"},
 		Identifier:  "R",
 	}
 )
 
-func (c *mockConfig) Checkers() []*checker.LangDef {
-	return []*checker.LangDef{checker_a, checker_b, checker_c}
+func (c *mockConfig) Checkers() []*checker.Checker {
+	return []*checker.Checker{checker_a, checker_b, checker_c}
 }
 
 var (

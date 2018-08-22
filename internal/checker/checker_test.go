@@ -7,7 +7,7 @@ import (
 )
 
 func TestStartCheck(t *testing.T) {
-	l := &checker.LangDef{
+	l := &checker.Checker{
 		CommandName: "echo",
 		Args:        []string{"1.23.4"},
 		Identifier:  "A",
