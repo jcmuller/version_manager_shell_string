@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
+	"github.com/jcmuller/version_manager_shell_string/internal/checker"
 )
 
 type chkr interface {
@@ -17,7 +17,7 @@ type chkr interface {
 }
 
 type cfg interface {
-	Checkers() []*langdef.LangDef
+	Checkers() []*checker.LangDef
 }
 
 // Versions Hold these guys
