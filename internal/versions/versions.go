@@ -16,21 +16,21 @@ type chkr interface {
 	Prepare(string)
 }
 
-type config interface {
+type cfg interface {
 	Checkers() []*langdef.LangDef
 }
 
 // Versions Hold these guys
 type Versions struct {
 	path   string
-	config config
+	config cfg
 	//	checkers []langdef.LangDef
 	checkers    []chkr
 	onlyDefined bool
 }
 
 // New new version
-func New(c config, path string) *Versions {
+func New(c cfg, path string) *Versions {
 	checkers := make([]chkr, len(c.Checkers()))
 	for i, v := range c.Checkers() {
 		checkers[i] = chkr(v)
