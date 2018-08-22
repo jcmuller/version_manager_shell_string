@@ -17,7 +17,7 @@ type chkr interface {
 }
 
 type cfg interface {
-	Checkers() []*checker.LangDef
+	Checkers() []*checker.Checker
 }
 
 // Versions Hold these guys
