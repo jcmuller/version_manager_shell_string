@@ -16,8 +16,10 @@ type Checker struct {
 	Defined     bool
 	CommandName string   `json:"command"`
 	Args        []string `json:"args"`
-	Identifier  string   `json:"identifier"`
-	File        string   `json:"file"`
+	// Identifier is the string shown in the output
+	Identifier string `json:"identifier"`
+	// File is used to show whether the version is defined in the current directory
+	File string `json:"file"`
 }
 
 // StartCheck
