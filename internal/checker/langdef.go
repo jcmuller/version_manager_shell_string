@@ -16,7 +16,7 @@ type LangDef struct {
 	Defined     bool
 	CommandName string   `json:"command"`
 	Args        []string `json:"args"`
-	Identifier  string   `json:"identifier`
+	Identifier  string   `json:"identifier"`
 	File        string   `json:"file"`
 }
 
