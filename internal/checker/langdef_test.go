@@ -1,13 +1,13 @@
-package langdef_test
+package checker_test
 
 import (
 	"testing"
 
-	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
+	"github.com/jcmuller/version_manager_shell_string/internal/checker"
 )
 
 func TestStartCheck(t *testing.T) {
-	l := &langdef.LangDef{
+	l := &checker.LangDef{
 		CommandName: "echo",
 		Args:        []string{"1.23.4"},
 		Identifier:  "A",

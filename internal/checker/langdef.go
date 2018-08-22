@@ -1,4 +1,4 @@
-package langdef
+package checker
 
 import (
 	"bufio"

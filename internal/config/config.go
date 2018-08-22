@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/ghodss/yaml"
-	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
+	"github.com/jcmuller/version_manager_shell_string/internal/checker"
 )
 
 var (
@@ -19,14 +19,14 @@ var (
 	)
 )
 
-func (c *Config) Checkers() (checkers []*langdef.LangDef) {
+func (c *Config) Checkers() (checkers []*checker.LangDef) {
 	checkers = c.checkers
 
 	return
 }
 
 type Config struct {
-	checkers []*langdef.LangDef
+	checkers []*checker.LangDef
 }
 
 func New() (c *Config) {

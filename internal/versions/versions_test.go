@@ -3,32 +3,32 @@ package versions_test
 import (
 	"testing"
 
-	"github.com/jcmuller/version_manager_shell_string/internal/langdef"
+	"github.com/jcmuller/version_manager_shell_string/internal/checker"
 	"github.com/jcmuller/version_manager_shell_string/internal/versions"
 )
 
 type mockConfig struct{}
 
 var (
-	checker_a = &langdef.LangDef{
+	checker_a = &checker.LangDef{
 		CommandName: "echo",
 		Args:        []string{"1.23.4"},
 		Identifier:  "A",
 	}
-	checker_b = &langdef.LangDef{
+	checker_b = &checker.LangDef{
 		CommandName: "echo",
 		Args:        []string{"99Foo"},
 		Identifier:  "Z",
 	}
-	checker_c = &langdef.LangDef{
+	checker_c = &checker.LangDef{
 		CommandName: "echo",
 		Args:        []string{"3.1"},
 		Identifier:  "R",
 	}
 )
 
-func (c *mockConfig) Checkers() []*langdef.LangDef {
-	return []*langdef.LangDef{checker_a, checker_b, checker_c}
+func (c *mockConfig) Checkers() []*checker.LangDef {
+	return []*checker.LangDef{checker_a, checker_b, checker_c}
 }
 
 var (
