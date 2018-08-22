@@ -22,9 +22,7 @@ type cfg interface {
 
 // Versions Hold these guys
 type Versions struct {
-	path   string
-	config cfg
-	//	checkers []langdef.LangDef
+	path        string
 	checkers    []chkr
 	onlyDefined bool
 }
