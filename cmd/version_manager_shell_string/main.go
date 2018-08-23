@@ -39,11 +39,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	path, err := findDirectory(dir)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "No directory found: %+v\n", err)
-		os.Exit(1)
-	}
+	path, _ := findDirectory(dir)
 
 	c := config.New()
 	v := versions.New(c, path)
