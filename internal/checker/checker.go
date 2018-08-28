@@ -21,7 +21,7 @@ type Checker struct {
 	File string `json:"file"`
 }
 
-func (c *Checker) Run(path string, out chan string) {
+func (c *Checker) Run(path string, out chan<- string) {
 	c.Command = exec.Command(c.CommandName, c.Args...)
 	c.BasePath = path
 	c.setDefined()
