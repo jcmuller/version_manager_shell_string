@@ -1,36 +1,12 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
-	"path"
-	"path/filepath"
-	"strings"
-
 	"github.com/jcmuller/version_manager_shell_string/internal/config"
 	"github.com/jcmuller/version_manager_shell_string/internal/versions"
+	"github.com/jcmuller/version_manager_shell_string/internal/util"
 )
-
-func findDirectory(input string) (string, error) {
-	candidate := filepath.Join(input, ".git")
-	info, err := os.Stat(candidate)
-
-	if err == nil && info.IsDir() {
-		return input, nil
-	}
-
-	// Go up one level
-	dir, _ := path.Split(input)
-	dir = strings.TrimRight(dir, "/")
-
-	if dir == "" {
-		err := errors.New("No .git directory found")
-		return "", err
-	}
-
-	return findDirectory(dir)
-}
 
 func main() {
 	dir, err := os.Getwd()
@@ -39,7 +15,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	path, _ := findDirectory(dir)
+	path, _ := util.FindDirectory(dir)
 
 	c := config.New()
 	v := versions.New(c, path)
