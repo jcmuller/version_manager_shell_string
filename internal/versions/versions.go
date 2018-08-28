@@ -1,20 +1,11 @@
 package versions
 
 import (
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/jcmuller/version_manager_shell_string/internal/checker"
+	"sort"
 )
-
-type chkr interface {
-	GetVersion()
-	IsDefined() bool
-	Prepare(string)
-	StartCheck()
-	String() string
-}
 
 type cfg interface {
 	Checkers() []*checker.Checker
@@ -22,59 +13,37 @@ type cfg interface {
 
 // Versions Hold these guys
 type Versions struct {
-	checkers    []chkr
-	onlyDefined bool
-	path        string
+	config  cfg
+	path    string
+	results []string
 }
 
 // New new version
-func New(c cfg, path string) *Versions {
-	checkers := make([]chkr, len(c.Checkers()))
-	for i, v := range c.Checkers() {
-		checkers[i] = chkr(v)
-		v.Prepare(path)
-	}
-
-	return &Versions{
-		checkers:    checkers,
-		onlyDefined: false,
-		path:        path,
-	}
+func New(config cfg, path string) *Versions {
+	checkerCount := len(config.Checkers())
+	results := make([]string, checkerCount, checkerCount)
+	return &Versions{config, path, results}
 }
 
-// GetVersions does that
-func (v *Versions) GetVersions() {
-	for _, element := range v.checkers {
-		element.GetVersion()
-	}
+func (v *Versions) checkers() (checkers []*checker.Checker) {
+	return v.config.Checkers()
 }
 
-func (v *Versions) presentVersions() []string {
-	o := make([]string, 0)
+func (v *Versions) Check() {
+	versionChannel := make(chan string)
 
-	v.setOnlyDefined()
-
-	for _, element := range v.checkers {
-		if v.onlyDefined {
-			if element.IsDefined() {
-				o = append(o, element.String())
-			}
-		} else {
-
-			o = append(o, element.String())
-		}
+	for _, c := range v.checkers() {
+		go c.Run(v.path, versionChannel)
 	}
 
-	return o
+	for i := 0; i < len(v.checkers()); i++ {
+		msg := <-versionChannel
+		v.results[i] = msg
+	}
+
+	sort.Strings(v.results)
 }
 
 func (v *Versions) String() string {
-	return strings.Join(v.presentVersions(), "|")
-}
-
-func (v *Versions) setOnlyDefined() {
-	file := filepath.Join(v.path, ".only_defined")
-	_, err := os.Stat(file)
-
-	v.onlyDefined = err == nil
+	return strings.Join(v.results, "|")
 }

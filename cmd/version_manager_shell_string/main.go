@@ -17,8 +17,7 @@ func main() {
 
 	path, _ := util.FindDirectory(dir)
 
-	c := config.New()
-	v := versions.New(c, path)
-	v.GetVersions()
+	v := versions.New(config.New(), path)
+	v.Check()
 	fmt.Println(v)
 }

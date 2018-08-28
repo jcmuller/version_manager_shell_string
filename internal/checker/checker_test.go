@@ -13,7 +13,7 @@ func TestStartCheck(t *testing.T) {
 		Identifier:  "A",
 	}
 
-	l.Prepare("some path")
+	l.Run("some path")
 	l.GetVersion()
 
 	actual := l.String()

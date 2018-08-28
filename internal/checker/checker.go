@@ -1,7 +1,6 @@
 package checker
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
@@ -22,67 +21,39 @@ type Checker struct {
 	File string `json:"file"`
 }
 
-// StartCheck
-func (l *Checker) StartCheck() {
-	reader, err := l.Command.StdoutPipe()
+func (c *Checker) Run(path string, out chan string) {
+	c.Command = exec.Command(c.CommandName, c.Args...)
+	c.BasePath = path
+	c.setDefined()
+
+	output, err := c.Command.Output()
+
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error getting stdout pipe: %+v\n", err)
-		os.Exit(1)
+		c.Version = "ERR"
+	} else {
+		c.Version = strings.Trim(string(output), "\n")
 	}
 
-	scanner := bufio.NewScanner(reader)
-
-	go func() {
-		for scanner.Scan() {
-			l.Version = scanner.Text()
-		}
-	}()
-
-	err = l.Command.Start()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error starting command: %+v\n", err)
-		os.Exit(1)
-	}
+	out <- c.String()
 }
 
-// Wait
-func (l *Checker) Wait() {
-	err := l.Command.Wait()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error waiting for command: %+v\n", err)
-		os.Exit(1)
-	}
-}
-
-func (l *Checker) Prepare(path string) {
-	l.Command = exec.Command(l.CommandName, l.Args...)
-	l.BasePath = path
-	l.StartCheck()
-}
-
-func (l *Checker) setDefined() {
-	file := filepath.Join(l.BasePath, l.File)
+func (c *Checker) setDefined() {
+	file := filepath.Join(c.BasePath, c.File)
 	_, err := os.Stat(file)
-	l.Defined = err == nil
-}
-
-// GetVersion does that
-func (l *Checker) GetVersion() {
-	l.setDefined()
-	l.Wait()
+	c.Defined = err == nil
 }
 
 // Output string
-func (l *Checker) String() (str string) {
-	str = fmt.Sprintf("%s:%s", l.Identifier, l.Version)
+func (c *Checker) String() (str string) {
+	str = fmt.Sprintf("%s:%s", c.Identifier, c.Version)
 
-	if l.Defined {
+	if c.Defined {
 		str = strings.Join([]string{str, "*"}, "")
 	}
 
 	return
 }
 
-func (l *Checker) IsDefined() bool {
-	return l.Defined
+func (c *Checker) IsDefined() bool {
+	return c.Defined
 }
