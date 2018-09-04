@@ -4,39 +4,42 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/jcmuller/version_manager_shell_string/internal/checker"
 )
 
-type checker interface {
+type chkr interface {
 	GetVersion()
-	String() string
-	StartCheck()
 	IsDefined() bool
+	Prepare(string)
+	StartCheck()
+	String() string
+}
+
+type cfg interface {
+	Checkers() []*checker.Checker
 }
 
 // Versions Hold these guys
 type Versions struct {
-	path        string
-	checkers    []checker
+	checkers    []chkr
 	onlyDefined bool
+	path        string
 }
 
 // New new version
-func New(path string) *Versions {
-	return &Versions{
-		path:        path,
-		onlyDefined: false,
+func New(c cfg, path string) *Versions {
+	checkers := make([]chkr, len(c.Checkers()))
+	for i, v := range c.Checkers() {
+		checkers[i] = chkr(v)
+		v.Prepare(path)
 	}
-}
 
-// Checkers returns the checkers
-func (v *Versions) Checkers() []checker {
-	return v.checkers
-}
-
-// Add a checker
-func (v *Versions) AddChecker(checker checker) {
-	v.checkers = append(v.checkers, checker)
-	checker.StartCheck()
+	return &Versions{
+		checkers:    checkers,
+		onlyDefined: false,
+		path:        path,
+	}
 }
 
 // GetVersions does that
