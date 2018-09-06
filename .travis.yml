@@ -4,8 +4,7 @@ go:
   - master
 before_install:
   - mkdir -p /home/travis/.config/version_manager_shell_string
-  - |
-    echo "---\n- command: go\n  args: ['version']\n  identifier: G\n  file: .go-version" > /home/travis/.config/version_manager_shell_string/config.yml
+  - 'echo "---\n- command: go\n  args:\n  - version\n  identifier: G\n  file: .go-version\n" > /home/travis/.config/version_manager_shell_string/config.yml'
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 install:
   - dep ensure
