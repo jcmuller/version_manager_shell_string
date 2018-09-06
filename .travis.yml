@@ -1,6 +1,9 @@
 language: go
 go:
   - "1.10.x"
+cache:
+  directories:
+    - /home/travis/.config/version_manager_shell_string
 before_install:
   - mkdir -p /home/travis/.config/version_manager_shell_string
   - 'echo "---\n- command: go\n  args:\n  - version\n  identifier: G\n  file: .go-version\n" > /home/travis/.config/version_manager_shell_string/config.yml'
